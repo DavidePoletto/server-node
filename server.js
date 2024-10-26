@@ -7,9 +7,14 @@ const PORT = process.env.PORT || 5000;
 app.use(cors()); // Abilita il CORS per tutte le richieste
 app.use(express.json()); // Parsing JSON per le richieste
 
-// Rotte
-const routes = require('./routes'); // Importa le tue rotte
+// Importa le rotte
+const routes = require('./routes'); 
 app.use('/api', routes); // Tutte le API risponderanno sotto "/api"
+
+// Rotta principale per verificare il funzionamento del server
+app.get('/', (req, res) => {
+  res.send('Server is running!');
+});
 
 // Avvio del server
 app.listen(PORT, () => {
