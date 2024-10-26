@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const gamerPowerController = require('../controllers/gamerPowerController');
+const newsController = require('../controllers/newsController');
 
-// Definisci la rotta per ottenere le notizie da GamerPower
-router.get('/gamerpower/news', gamerPowerController.getNews);
+// Rotta per ottenere notizie nerd in italiano
+router.get('/news/nerd', newsController.getNerdNews);
 
 module.exports = router;
 
