@@ -8,8 +8,6 @@ exports.getGamingNews = async (req, res) => {
         q: 'videogiochi', 
         language: 'it',   
         category: 'technology',
-        page: req.query.page || 1, // Imposta la pagina, di default 1
-        page_size: 20, // Numero di articoli per pagina
       },
     });
 
