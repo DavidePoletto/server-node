@@ -3,31 +3,12 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Configura CORS per consentire tutte le origini
+// Configura CORS e JSON
 app.use(cors());
-
-// Middleware per il parsing JSON
 app.use(express.json());
 
-// Forza l’intestazione CORS manualmente
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Consente tutte le origini
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
-// Importa le rotte
+// Importa le rotte dal file index.js all'interno della cartella routes
 const routes = require('./routes');
-app.use('/api', routes);
-
-// Rotta principale per testare il server
-app.get('/', (req, res) => {
-  res.send('Server is running!');
-});
-
-// Avvio del server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.use('/api', routes); // Questo applica tutte le rotte sotto "/api"
 
 
