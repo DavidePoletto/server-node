@@ -4,7 +4,7 @@ exports.getNerdNews = async (req, res) => {
   try {
     const response = await axios.get('https://newsdata.io/api/1/news', {
       params: {
-        apikey: 'LA_TUA_API_KEY', // Inserisci qui la tua chiave API
+        apikey: 'pub_57344223f965b1a800b96279183cd37794130', // Inserisci qui la tua chiave API
         language: 'it',
         category: 'entertainment', // Per notizie di intrattenimento
       },
