@@ -1,17 +1,17 @@
 const express = require('express');
-const cors = require('cors'); // Assicurati di importare cors
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Configura CORS per consentire le richieste dal tuo frontend
-app.use(cors({ origin: 'http://localhost:5173' }));
+// Configura CORS per consentire tutte le origini temporaneamente
+app.use(cors()); 
 
 // Middleware per il parsing JSON
 app.use(express.json());
 
 // Importa le rotte
 const routes = require('./routes');
-app.use('/api', routes); // Configura le rotte sotto "/api"
+app.use('/api', routes);
 
 // Rotta principale per testare il server
 app.get('/', (req, res) => {
@@ -22,3 +22,4 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
