@@ -8,6 +8,7 @@ exports.getGamingNews = async (req, res) => {
       q: 'videogiochi',
       language: 'it',
       category: 'technology',
+      page_size: 17, // Richiede esattamente 17 articoli
     };
     if (nextPage) params.page = nextPage; // Aggiungi solo se presente
 
@@ -15,13 +16,14 @@ exports.getGamingNews = async (req, res) => {
 
     res.json({
       articles: response.data.results,
-      nextPage: response.data.nextPage, // Invia `nextPage` per il prossimo caricamento
+      nextPage: response.data.nextPage, // Invia `nextPage` per il prossimo caricamento, se presente
     });
   } catch (error) {
     console.error("Errore nella chiamata a Newsdata.io:", error.response ? error.response.data : error.message);
     res.status(500).json({ message: error.response ? error.response.data : error.message });
   }
 };
+
 
 
 
