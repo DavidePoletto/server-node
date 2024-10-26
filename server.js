@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 5000; // Assicurati che process.env.PORT sia usato qui
+const PORT = process.env.PORT; // Usa solo process.env.PORT per Render
 
-// Configura CORS e JSON
+// Configura CORS per consentire tutte le origini (temporaneamente)
 app.use(cors());
 app.use(express.json());
 
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
   res.send('Server is running!');
 });
 
-// Avvia il server sulla porta specificata da Render
+// Avvio del server sulla porta specificata da Render
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

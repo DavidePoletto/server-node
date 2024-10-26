@@ -6,3 +6,4 @@ const gamerPowerController = require('../controllers/gamerPowerController');
 router.get('/gamerpower/news', gamerPowerController.getNews);
 
 module.exports = router;
+
