@@ -6,7 +6,7 @@ exports.getNerdNews = async (req, res) => {
       params: {
         apikey: 'pub_57344223f965b1a800b96279183cd37794130', // Inserisci qui la tua chiave API
         language: 'it',
-        category: 'entertainment', // Per notizie di intrattenimento
+        category: 'gaming', // Per notizie di intrattenimento
       },
     });
 
