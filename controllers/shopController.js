@@ -3,7 +3,7 @@ const axios = require('axios');
 exports.getShopGames = async (req, res) => {
   try {
     const params = {
-    apikey: '90736d80468d4a0c956e9428d59f8bbe',
+    key: '90736d80468d4a0c956e9428d59f8bbe',
     }
 
     const response = await axios.get('https://api.rawg.io/api/games', { params });
