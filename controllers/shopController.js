@@ -29,7 +29,7 @@ exports.getShopGames = async (req, res) => {
     const newReleases = await fetchGamesWithImages({ ordering: '-released' });
     const topRated = await fetchGamesWithImages({ ordering: '-rating' });
     const upcoming = await fetchGamesWithImages({ dates: '2024-11-01,2026-12-31', ordering: '-added' });
-    const singleplayerGames = await fetchGamesWithImages({ tags: 'singleplayer' });
+    const singleplayerGames = await fetchGamesWithImages({ tags: 'rpg' });
     const multiplayerGames = await fetchGamesWithImages({ tags: 'multiplayer' });
     const openWorldGames = await fetchGamesWithImages({ tags: 'open-world' });
 
