@@ -32,18 +32,20 @@ exports.getShopGames = async (req, res) => {
       params: { key: API_KEY, tags: 'open-world', page_size: 12 }
     });
 
+    // Filtra i giochi per includere solo quelli con un'immagine di copertina
+    const filterWithImage = (games) => games.filter(game => game.background_image);
+
     res.json({
-      trending: trendingResponse.data.results,
-      newReleases: newReleasesResponse.data.results,
-      topRated: topRatedResponse.data.results,
-      upcoming: upcomingResponse.data.results,
-      indieGames: indieGamesResponse.data.results,
-      multiplayerGames: multiplayerGamesResponse.data.results,
-      openWorldGames: openWorldGamesResponse.data.results
+      trending: filterWithImage(trendingResponse.data.results),
+      newReleases: filterWithImage(newReleasesResponse.data.results),
+      topRated: filterWithImage(topRatedResponse.data.results),
+      upcoming: filterWithImage(upcomingResponse.data.results),
+      indieGames: filterWithImage(indieGamesResponse.data.results),
+      multiplayerGames: filterWithImage(multiplayerGamesResponse.data.results),
+      openWorldGames: filterWithImage(openWorldGamesResponse.data.results)
     });
   } catch (error) {
     console.error("Errore nella chiamata a RAWG:", error.response ? error.response.data : error.message);
     res.status(500).json({ message: error.response ? error.response.data : error.message });
   }
 };
-

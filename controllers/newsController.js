@@ -13,8 +13,11 @@ exports.getGamingNews = async (req, res) => {
 
     const response = await axios.get('https://newsdata.io/api/1/news', { params });
 
+    // Filtra gli articoli per includere solo quelli con immagine di copertina
+    const articlesWithImages = response.data.results.filter(article => article.image_url);
+
     res.json({
-      articles: response.data.results,
+      articles: articlesWithImages, // Invia solo articoli con immagine
       nextPage: response.data.nextPage, // Invia nextPage per il prossimo caricamento
     });
   } catch (error) {
@@ -22,10 +25,3 @@ exports.getGamingNews = async (req, res) => {
     res.status(500).json({ message: error.response ? error.response.data : error.message });
   }
 };
-
-
-
-
-
-
-
