@@ -4,48 +4,47 @@ exports.getShopGames = async (req, res) => {
   try {
     const API_KEY = '90736d80468d4a0c956e9428d59f8bbe';
 
-    const trendingResponse = await axios.get(`https://api.rawg.io/api/games`, {
-      params: { key: API_KEY, ordering: '-added', page_size: 12 }
-    });
+    const fetchGamesWithImages = async (params, maxResults = 12) => {
+      let games = [];
+      let page = 1;
 
-    const newReleasesResponse = await axios.get(`https://api.rawg.io/api/games`, {
-      params: { key: API_KEY, ordering: '-released', page_size: 12 }
-    });
+      // Continua a chiamare l'API finché non hai 12 giochi con immagine di copertina
+      while (games.length < maxResults) {
+        const response = await axios.get(`https://api.rawg.io/api/games`, {
+          params: { ...params, key: API_KEY, page_size: 20, page } // page_size aumentato per più risultati
+        });
 
-    const topRatedResponse = await axios.get(`https://api.rawg.io/api/games`, {
-      params: { key: API_KEY, ordering: '-rating', page_size: 12 }
-    });
+        const filteredGames = response.data.results.filter(game => game.background_image);
+        games = games.concat(filteredGames);
 
-    const upcomingResponse = await axios.get(`https://api.rawg.io/api/games`, {
-      params: { key: API_KEY, dates: '2024-01-01,2024-12-31', ordering: '-added', page_size: 12 }
-    });
+        if (response.data.results.length < 20) break; // Se finiscono i risultati, interrompi il ciclo
 
-    const indieGamesResponse = await axios.get(`https://api.rawg.io/api/games`, {
-      params: { key: API_KEY, tags: 'indie', page_size: 12 }
-    });
+        page++;
+      }
 
-    const multiplayerGamesResponse = await axios.get(`https://api.rawg.io/api/games`, {
-      params: { key: API_KEY, tags: 'multiplayer', page_size: 12 }
-    });
+      return games.slice(0, maxResults); // Restituisci solo i primi 12 risultati con immagine
+    };
 
-    const openWorldGamesResponse = await axios.get(`https://api.rawg.io/api/games`, {
-      params: { key: API_KEY, tags: 'open-world', page_size: 12 }
-    });
-
-    // Filtra i giochi per includere solo quelli con un'immagine di copertina
-    const filterWithImage = (games) => games.filter(game => game.background_image);
+    const trending = await fetchGamesWithImages({ ordering: '-added' });
+    const newReleases = await fetchGamesWithImages({ ordering: '-released' });
+    const topRated = await fetchGamesWithImages({ ordering: '-rating' });
+    const upcoming = await fetchGamesWithImages({ dates: '2024-01-01,2024-12-31', ordering: '-added' });
+    const indieGames = await fetchGamesWithImages({ tags: 'indie' });
+    const multiplayerGames = await fetchGamesWithImages({ tags: 'multiplayer' });
+    const openWorldGames = await fetchGamesWithImages({ tags: 'open-world' });
 
     res.json({
-      trending: filterWithImage(trendingResponse.data.results),
-      newReleases: filterWithImage(newReleasesResponse.data.results),
-      topRated: filterWithImage(topRatedResponse.data.results),
-      upcoming: filterWithImage(upcomingResponse.data.results),
-      indieGames: filterWithImage(indieGamesResponse.data.results),
-      multiplayerGames: filterWithImage(multiplayerGamesResponse.data.results),
-      openWorldGames: filterWithImage(openWorldGamesResponse.data.results)
+      trending,
+      newReleases,
+      topRated,
+      upcoming,
+      indieGames,
+      multiplayerGames,
+      openWorldGames
     });
   } catch (error) {
     console.error("Errore nella chiamata a RAWG:", error.response ? error.response.data : error.message);
     res.status(500).json({ message: error.response ? error.response.data : error.message });
   }
 };
+
