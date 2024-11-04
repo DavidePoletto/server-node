@@ -4,21 +4,21 @@ exports.getShopGames = async (req, res) => {
   try {
     const API_KEY = '90736d80468d4a0c956e9428d59f8bbe';
 
+    // Funzione per ottenere i giochi con immagini e aggiungere gli screenshot
     const fetchGamesWithImages = async (params, maxResults = 12) => {
       let games = [];
       let page = 1;
 
-      // Continua a chiamare l'API finché non hai 12 giochi con immagine di copertina
+      // Continua a richiedere giochi finché non si raggiunge il numero desiderato
       while (games.length < maxResults) {
         const response = await axios.get(`https://api.rawg.io/api/games`, {
-          params: { ...params, key: API_KEY, page_size: 20, page } // page_size aumentato per più risultati
+          params: { ...params, key: API_KEY, page_size: 20, page }
         });
 
         const filteredGames = response.data.results.filter(game => game.background_image);
         games = games.concat(filteredGames);
 
-        if (response.data.results.length < 20) break; // Se finiscono i risultati, interrompi il ciclo
-
+        if (response.data.results.length < 20) break; // Interrompi se non ci sono più risultati
         page++;
       }
 
@@ -40,10 +40,11 @@ exports.getShopGames = async (req, res) => {
         return response.data.results.map(screenshot => screenshot.image);
       } catch (error) {
         console.error(`Errore nel caricamento degli screenshot per il gioco con ID ${gameId}:`, error.message);
-        return []; // Restituisci un array vuoto se ci sono errori
+        return []; // Restituisci un array vuoto se c'è un errore
       }
     };
 
+    // Categorie di giochi da richiedere
     const trending = await fetchGamesWithImages({ ordering: '-added' });
     const newReleases = await fetchGamesWithImages({ ordering: '-released' });
     const topRated = await fetchGamesWithImages({ ordering: '-rating' });
@@ -52,6 +53,7 @@ exports.getShopGames = async (req, res) => {
     const multiplayerGames = await fetchGamesWithImages({ tags: 'multiplayer' });
     const openWorldGames = await fetchGamesWithImages({ tags: 'open-world' });
 
+    // Risposta con tutte le categorie e i rispettivi giochi
     res.json({
       trending,
       newReleases,
