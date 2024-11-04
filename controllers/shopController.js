@@ -22,7 +22,26 @@ exports.getShopGames = async (req, res) => {
         page++;
       }
 
-      return games.slice(0, maxResults); // Restituisci solo i primi 12 risultati con immagine
+      // Aggiungi gli screenshot per ogni gioco
+      const gamesWithScreenshots = await Promise.all(games.slice(0, maxResults).map(async (game) => {
+        const screenshots = await fetchScreenshots(game.id);
+        return { ...game, screenshots }; // Aggiungi gli screenshot al gioco
+      }));
+
+      return gamesWithScreenshots;
+    };
+
+    // Funzione per ottenere gli screenshot di un gioco specifico
+    const fetchScreenshots = async (gameId) => {
+      try {
+        const response = await axios.get(`https://api.rawg.io/api/games/${gameId}/screenshots`, {
+          params: { key: API_KEY }
+        });
+        return response.data.results.map(screenshot => screenshot.image);
+      } catch (error) {
+        console.error(`Errore nel caricamento degli screenshot per il gioco con ID ${gameId}:`, error.message);
+        return []; // Restituisci un array vuoto se ci sono errori
+      }
     };
 
     const trending = await fetchGamesWithImages({ ordering: '-added' });
@@ -47,4 +66,3 @@ exports.getShopGames = async (req, res) => {
     res.status(500).json({ message: error.response ? error.response.data : error.message });
   }
 };
-
