@@ -7,19 +7,23 @@ exports.getGamingNews = async (req, res) => {
       q: 'videogiochi',
       language: 'it',
       category: 'technology',
-      size: 10, // Imposta il numero massimo di articoli per richiesta
+      size: 10, // Massimo per il piano gratuito
     };
 
     const response = await axios.get('https://newsdata.io/api/1/news', { params });
 
-    // Filtra gli articoli per includere solo quelli con immagine di copertina
-    const articlesWithImages = response.data.results.filter(article => article.image_url);
+    // Aggiungi un'immagine segnaposto agli articoli che ne sono sprovvisti
+    const articlesWithPlaceholders = response.data.results.map(article => ({
+      ...article,
+      image_url: article.image_url || `${req.protocol}://${req.get('host')}/placeholder.png`,
+    }));
 
     res.json({
-      articles: articlesWithImages, // Invia solo articoli con immagine
+      articles: articlesWithPlaceholders,
     });
   } catch (error) {
     console.error("Errore nella chiamata a Newsdata.io:", error.response ? error.response.data : error.message);
     res.status(500).json({ message: error.response ? error.response.data : error.message });
   }
 };
+
