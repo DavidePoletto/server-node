@@ -4,18 +4,18 @@ exports.getGamingNews = async (req, res) => {
   try {
     const params = {
       apikey: 'pub_57344223f965b1a800b96279183cd37794130',
-      q: 'videogiochi',
-      language: 'it',
-      category: 'technology',
-      size: 10, // Massimo per il piano gratuito
+      q: 'videogiochi',         // Query di ricerca
+      language: 'it',           // Lingua italiana
+      category: 'technology',   // Categoria di tecnologia
+      size: 10                  // Richiedi il massimo degli articoli consentiti
     };
 
     const response = await axios.get('https://newsdata.io/api/1/news', { params });
 
-    // Aggiungi un'immagine segnaposto agli articoli che ne sono sprovvisti
+    // Aggiungi un'immagine segnaposto agli articoli senza immagine
     const articlesWithPlaceholders = response.data.results.map(article => ({
       ...article,
-      image_url: article.image_url || `${req.protocol}://${req.get('host')}/placeholder.png`,
+      image_url: article.image_url || `${req.protocol}://${req.get('host')}/placeholder.png`
     }));
 
     res.json({
