@@ -2,7 +2,7 @@ const axios = require('axios');
 
 exports.getShopGames = async (req, res) => {
   try {
-    const API_KEY = '90736d80468d4a0c956e9428d59f8bbe';
+    const API_KEY = '007a6c13f1af4bae93971d2762e64cf9';
 
     // Funzione per ottenere i giochi con immagini e aggiungere gli screenshot
     const fetchGamesWithImages = async (params, maxResults = 12) => {
