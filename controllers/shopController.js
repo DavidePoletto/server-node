@@ -47,11 +47,14 @@ exports.getShopGames = async (req, res) => {
     // Categorie di giochi da richiedere
     const trending = await fetchGamesWithImages({ ordering: '-added' });
     const newReleases = await fetchGamesWithImages({ ordering: '-released' });
-    const topRated = await fetchGamesWithImages({ ordering: '-rating' });
+    const topRated = (await fetchGamesWithImages({ ordering: '-rating' })).filter(
+      game => !game.tags.some(tag => tag.slug === 'adult')
+    );
     const upcoming = await fetchGamesWithImages({ dates: '2024-11-01,2026-12-31', ordering: '-added' });
-    const singleplayerGames = await fetchGamesWithImages({ tags: 'rpg' });
+    const nintendoGames = await fetchGamesWithImages({
+      platforms: '7,8,9,10'
+    });
     const multiplayerGames = await fetchGamesWithImages({ tags: 'multiplayer' });
-    const openWorldGames = await fetchGamesWithImages({ tags: 'open-world' });
 
     // Risposta con tutte le categorie e i rispettivi giochi
     res.json({
@@ -59,9 +62,8 @@ exports.getShopGames = async (req, res) => {
       newReleases,
       topRated,
       upcoming,
-      singleplayerGames,
+      nintendoGames,
       multiplayerGames,
-      openWorldGames
     });
   } catch (error) {
     console.error("Errore nella chiamata a RAWG:", error.response ? error.response.data : error.message);
