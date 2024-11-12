@@ -52,7 +52,7 @@ exports.getShopGames = async (req, res) => {
     );
     const upcoming = await fetchGamesWithImages({ dates: '2024-11-01,2026-12-31', ordering: '-added' });
     const nintendoGames = await fetchGamesWithImages({
-      platforms: '7,8,9,10'
+      developers: '103', // ID di Nintendo come sviluppatore
     });
     const multiplayerGames = await fetchGamesWithImages({ tags: 'multiplayer' });
 
