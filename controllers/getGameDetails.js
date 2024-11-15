@@ -2,7 +2,7 @@
 const axios = require('axios');
 
 exports.getGameDetails = async (req, res) => {
-  const API_KEY = '007a6c13f1af4bae93971d2762e64cf9';
+  const API_KEY = '4a1bd6afcdf64cc88849b9c47b4d7c56';
   const { gameId } = req.params;
 
   try {
