@@ -2,7 +2,7 @@ const axios = require('axios');
 
 exports.getShopGames = async (req, res) => {
   try {
-    const API_KEY = '90736d80468d4a0c956e9428d59f8bbe';
+    const API_KEY = '4a1bd6afcdf64cc88849b9c47b4d7c56';
 
     const fetchGamesWithImages = async (params, maxResults = 12) => {
       let games = [];
