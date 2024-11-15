@@ -9,7 +9,7 @@ exports.getShopGames = async (req, res) => {
     const API_KEY = '4a1bd6afcdf64cc88849b9c47b4d7c56';
 
     // Funzione per ottenere i giochi con immagini
-    const fetchGamesWithImages = async (params, maxResults = 10) => {
+    const fetchGamesWithImages = async (params, maxResults = 9) => {
       let games = [];
       let page = 1;
 
