@@ -1,14 +1,13 @@
 const axios = require('axios');
 const NodeCache = require('node-cache');
 
-// Cache per ridurre le richieste ripetute
-const gameCache = new NodeCache({ stdTTL: 3600 }); // Cache con scadenza di 1 ora
+const gameCache = new NodeCache({ stdTTL: 3600 });
 
 exports.getShopGames = async (req, res) => {
   try {
     const API_KEY = '4a1bd6afcdf64cc88849b9c47b4d7c56';
 
-    // Funzione per ottenere i giochi con immagini
+
     const fetchGamesWithImages = async (params, maxResults = 9) => {
       let games = [];
       let page = 1;
@@ -28,10 +27,9 @@ exports.getShopGames = async (req, res) => {
       }
 
       console.log(`Fetched ${games.length} games for params:`, params);
-      return games.slice(0, maxResults); // Limita il numero di giochi ritornati
+      return games.slice(0, maxResults);
     };
 
-    // Funzione per ottenere screenshot con caching
     const fetchScreenshots = async (gameId) => {
       if (gameCache.has(gameId)) {
         console.log(`Cache hit for screenshots of game ID ${gameId}`);
@@ -45,7 +43,7 @@ exports.getShopGames = async (req, res) => {
         });
 
         const screenshots = response.data.results.map((screenshot) => screenshot.image);
-        gameCache.set(gameId, screenshots); // Salva nella cache
+        gameCache.set(gameId, screenshots);
         return screenshots;
       } catch (error) {
         console.error(`Errore nel caricamento degli screenshot per il gioco con ID ${gameId}:`, error.message);
@@ -53,7 +51,6 @@ exports.getShopGames = async (req, res) => {
       }
     };
 
-    // Chiamate per le diverse categorie di giochi
     const trending = await fetchGamesWithImages({ ordering: '-added' });
     const newReleases = await fetchGamesWithImages({ ordering: '-released' });
     const topRated = (
@@ -66,7 +63,6 @@ exports.getShopGames = async (req, res) => {
     const nintendoGames = await fetchGamesWithImages({ developers: 'nintendo' });
     const multiplayerGames = await fetchGamesWithImages({ tags: 'multiplayer' });
 
-    // Risposta JSON
     res.json({
       trending,
       newReleases,
