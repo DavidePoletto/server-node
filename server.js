@@ -7,8 +7,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 mongoose.connect(process.env.MONGO_URI)
-
-
 .then(() => console.log(`Connesso al database: ${process.env.MONGO_URI}`))
 .catch((err) => console.error('Errore connessione MongoDB:', err));
 
@@ -17,10 +15,13 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const authRoutes = require('./routes/authRoutes');
+const ordersRoutes = require('./routes/orderRoutes');
 const generalRoutes = require('./routes');
 
 app.use('/api/auth', authRoutes);
+app.use('/api/orders', ordersRoutes);
 app.use('/api', generalRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('Server is running!');
