@@ -29,7 +29,6 @@ exports.createOrder = async (req, res) => {
 
 exports.getOrders = async (req, res) => {
   try {
-    // Usa l'ID dell'utente dal token decodificato per filtrare
     const userId = req.user.id;
 
     console.log(`Recupero ordini per l'utente con ID: ${userId}`);
